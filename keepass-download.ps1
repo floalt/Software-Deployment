@@ -1,6 +1,7 @@
 ﻿<#
 
     This script downloads current builds of KeePass Setup, Plugins and Language Files
+    stores the files on a server deploy path to be delivered by GPO
 
     author: flo.alt@fa-netz.de
     https://github/floalt/

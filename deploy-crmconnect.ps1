@@ -113,7 +113,7 @@ function get-version-app {
     
     # last try this way:
         if (!$version) {
-            $version = (Get-Package -Provider Programs | where {$_.Name -like "*$search_name"}).Version
+            $version = (Get-Package -Provider Programs | Where-Object {$_.Name -like "*$search_name"}).Version
         }
 
     return $version

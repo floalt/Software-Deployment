@@ -8,56 +8,110 @@
 
 #>
 
-## configure some things:
 
-$deploypath = "\\serv-dc\deployment\keepass"
-$dl_folder = $deploypath
-$dl_files = @(
-    @{name = 'KeePass Setup';url = 'https://doku.fa-netz.de/downloads/KeePass-Setup.exe'}
-    @{name = 'KeePass Plugins';url = 'https://doku.fa-netz.de/downloads/keepassfiles.zip'}
-)
+# reading variables from config file:
+
+$scriptpath = (Split-Path -parent $PSCommandPath)
+
+. $scriptpath\keepass-download.config.ps1
+
+echo $dingdong
 
 
-## functions
+## --------------  functions  -------------- ##
+
+
+function start-logfile {
+
+    if (!(test-path $logpath)) {mkdir $logpath}
+    $script:log_tempfile =  $logpath + "\" + $logname + "_log_tempfile" + ".log"
+    $script:log_okfile = $logpath + "\" + $logname + "_ok" + ".log"
+    $script:log_errorfile = $logpath + "\" + $logname + "_fail" + ".log"
+    $script:log_today = $logpath + "\" + $logname + "-" + $(Get-Date -Format yyyyMMdd-HHmmss) + ".log"
+    "Beginning: $(Get-Date -Format yyyy-MM-dd_HH:mm:ss)" >> $log_tempfile
+}
+
+
+
+function close-logfile {
+
+    "End: $(Get-Date -Format yyyy-MM-dd_HH:mm:ss)" >> $log_tempfile
+    if ($log_today) {cp $log_tempfile $log_today}
+    if ($errorcount -eq 0) {
+        mv $log_tempfile $log_okfile -Force
+    } else {
+        mv $log_tempfile $log_errorfile -Force
+    }
+}
+
+
+function remove-logfiles {
+
+    [int]$Daysback = "-" + $logdays
+
+    $CurrentDate = Get-Date
+    $DatetoDelete = $CurrentDate.AddDays($Daysback)
+    Get-ChildItem $logpath | Where-Object { ($_.Extension -eq ".log") -and ($_.LastWriteTime -lt $DatetoDelete) } | Remove-Item
+
+}
+
 
 function errorcheck {
+
     if ($?) {
-        write-host $yeah -F Green
+        $yeah >> $log_tempfile
     } else {
-        write-host $shit -F Red
+        $shit >> $log_tempfile
         $script:errorcount = $script:errorcount + 1
     }
 }
 
 
 function dl-morefiles {
-    foreach ($file in $dl_files) {
-        $yeah="OK: Downloading " + $file.name + " successful"
-        $shit="FAIL: Downloading " + $file.name + " failed"
-        Start-BitsTransfer $file.url $dl_folder; errorcheck
+    foreach ($element in $dl_files) {
+
+        $output = $dl_folder + "\" + $element.file
+
+        $yeah="OK: Downloading " + $element.name + " successful"
+        $shit="FAIL: Downloading " + $element.name + " failed"
+        Invoke-WebRequest $element.url -Outfile $output; errorcheck
     }
 }
 
 
-## the script ist starting here
 
-$errorcount = 0
-$timestamp = Get-Date -Format yyyy-MM-dd_HH:mm:ss
+
+## -------------- the script ist starting here -------------- ##
+
+
+# first steps
+
+    $dl_folder = $deploypath
+    
+    $logpath = $deploypath + "\logs"
+    $logname = "keepass-download"
+    $logdays = 21
+    
+    $errorcount = 0
+    $timestamp = Get-Date -Format yyyy-MM-dd_HH:mm:ss
+
+    start-logfile
 
 
 # Downloading files
 
-dl-morefiles
+    dl-morefiles
+
 
 # Unzip
-    $yeah="Unzip Plugins successful"
-    $shit="Unzip Plugins failed"
-Expand-Archive $deploypath\keepassfiles.zip $deploypath -Force; errorcheck
-rm $deploypath\keepassfiles.zip
+
+        $yeah="OK: Unzip Plugins successful"
+        $shit="FAIL: Unzip Plugins failed"
+    Expand-Archive $deploypath\keepassfiles.zip $deploypath -Force; errorcheck
+    rm $deploypath\keepassfiles.zip
+
 
 # Finish
-if ($errorcount -eq 0) {
-    $timestamp > $deploypath\lastgooddownload.txt 
-} else {
-    $timestamp > $deploypath\lastbaddownload.txt 
-}
+
+    close-logfile
+    remove-logfiles

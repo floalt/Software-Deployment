@@ -1,11 +1,10 @@
 ﻿<#
 
     This script downloads current builds of KeePass Setup, Plugins and Language Files
-    stores the files on a server deploy path to be delivered by GPO
 
     author: flo.alt@fa-netz.de
     https://github/floalt/
-    version: 0.7
+    version: 0.71
 
 #>
 
@@ -53,10 +52,8 @@ dl-morefiles
 # Unzip
     $yeah="Unzip Plugins successful"
     $shit="Unzip Plugins failed"
-Expand-Archive $deploypath\keepassfiles.zip $deploypath\Plugins -Force; errorcheck
+Expand-Archive $deploypath\keepassfiles.zip $deploypath -Force; errorcheck
 rm $deploypath\keepassfiles.zip
-if (!(test-path $deploypath\Languages)) {mkdir $deploypath\Languages}
-mv $deploypath\plugins\*.lngx $deploypath\Languages\ -Force
 
 # Finish
 if ($errorcount -eq 0) {

@@ -4,7 +4,7 @@
 
     author: flo.alt@fa-netz.de
     https://github/floalt/
-    version: 0.71
+    version: 0.8
 
 #>
 

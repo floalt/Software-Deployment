@@ -12,7 +12,6 @@
 # reading variables from config file:
 
 $scriptpath = (Split-Path -parent $PSCommandPath)
-
 . $scriptpath\keepass-download.config.ps1
 
 echo $dingdong

@@ -4,15 +4,22 @@
 
     author: flo.alt@fa-netz.de
     https://github/floalt/
-    version: 0.8
+    version: 0.81
 
 #>
 
+## settings for invoke-scriptupdate
 
-# reading variables from config file:
+    $scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"
 
-$scriptpath = (Split-Path -parent $PSCommandPath)
-. $scriptpath\keepass-download.config.ps1
+    
+## getting script name & path and reading variables from config file:
+
+    $scriptpath = (Split-Path -parent $PSCommandPath)
+    $scriptname = $MyInvocation.MyCommand.Name
+    $scriptfullpath = $scriptpath + "\" + $scriptname
+
+    . $scriptpath\keepass-download.config.ps1
 
 
 ## --------------  functions  -------------- ##
@@ -39,6 +46,16 @@ function close-logfile {
     } else {
         mv $log_tempfile $log_errorfile -Force
     }
+}
+
+
+
+function start-scriptupdate {
+
+    $yeah="OK: Self-Update of this script successful"
+    $shit="FAIL: Self-Update of this script failed"
+    Invoke-WebRequest -Uri $scriptsrc -OutFile $scriptfullpath; errorcheck
+
 }
 
 
@@ -110,5 +127,6 @@ function dl-morefiles {
 
 # Finish
 
+    start-scriptupdate
     close-logfile
     remove-logfiles

@@ -13,3 +13,9 @@
         @{name = 'KeePass Setup';url = 'https://doku.fa-netz.de/downloads/KeePass-Setup.exe'; file = 'KeePass-Setup.exe'}
         @{name = 'KeePass Plugins';url = 'https://doku.fa-netz.de/downloads/keepassfiles.zip'; file = 'keepassfiles.zip'}
     )
+
+
+# set auto-update for this script
+# if value = 1, this script updates itself by using source on GitHub
+
+    $autoupdate = 1

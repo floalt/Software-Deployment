@@ -4,7 +4,7 @@
 
     author: flo.alt@fa-netz.de
     https://github/floalt/
-    version: 0.81
+    version: 0.82
 
 #>
 
@@ -52,9 +52,11 @@ function close-logfile {
 
 function start-scriptupdate {
 
-    $yeah="OK: Self-Update of this script successful"
-    $shit="FAIL: Self-Update of this script failed"
-    Invoke-WebRequest -Uri $scriptsrc -OutFile $scriptfullpath; errorcheck
+    if ($autoupdate -eq 1) {
+        $yeah="OK: Self-Update of this script successful"
+        $shit="FAIL: Self-Update of this script failed"
+        Invoke-WebRequest -Uri $scriptsrc -OutFile $scriptfullpath; errorcheck
+    }
 
 }
 

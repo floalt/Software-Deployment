@@ -12,6 +12,10 @@
 
     $scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"
 
+
+## activate TLS 1.1 and TLS 1.2
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]'Tls11,Tls12'
     
 ## getting script name & path and reading variables from config file:
 

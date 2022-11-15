@@ -10,7 +10,7 @@
 
 ## settings for invoke-scriptupdate
 
-    $scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"
+$scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"
 
 
 ## activate TLS 1.1 and TLS 1.2
@@ -36,6 +36,7 @@ function start-logfile {
     $script:log_okfile = $logpath + "\" + $logname + "_ok" + ".log"
     $script:log_errorfile = $logpath + "\" + $logname + "_fail" + ".log"
     $script:log_today = $logpath + "\" + $logname + "-" + $(Get-Date -Format yyyyMMdd-HHmmss) + ".log"
+    $script:log_clientfile = $logpath + "\" + "clientupdate" + ".log"
     "Beginning: $(Get-Date -Format yyyy-MM-dd_HH:mm:ss)" >> $log_tempfile
 }
 
@@ -47,6 +48,7 @@ function close-logfile {
     if ($log_today) {cp $log_tempfile $log_today}
     if ($errorcount -eq 0) {
         mv $log_tempfile $log_okfile -Force
+        "Last update: $(Get-Date -Format yyyy-MM-dd_HH:mm:ss)" > $log_clientfile
     } else {
         mv $log_tempfile $log_errorfile -Force
     }

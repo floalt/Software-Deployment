@@ -2,8 +2,10 @@
 
     description: Update any msi or exe package
         logiles stored on smb share for central monitoring
-    author: flo.alt@fa-netz.de
-    version: 0.8
+    
+        author: flo.alt@fa-netz.de
+    https://github.com/floalt/Software-Deployment/tree/main/update-anything
+    version: 0.81
 
 #>
 
@@ -19,7 +21,7 @@
 ### -------- setup --------
     
 # settings for invoke-scriptupdate
-    $scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"  ### URL ist falsch!
+    $scriptsrc = "https://github.com/floalt/Software-Deployment/raw/main/update-anything/update-anything.ps1"
 
 # load config file
     . $scriptpath\config.ps1
@@ -38,8 +40,8 @@
     function start-logfile {
 
         $script:log_tempfile =  "C:\" + $logname + "_log_tempfile" + ".log"
-        $script:log_okfile = $logpath + "ok_" + $env:COMPUTERNAME + ".log"
-        $script:log_errorfile = $logpath + "fail_" + $env:COMPUTERNAME + ".log"
+        $script:log_okfile = $logpath + "\" + "ok_" + $env:COMPUTERNAME + ".log"
+        $script:log_errorfile = $logpath + "\" + "fail_" + $env:COMPUTERNAME + ".log"
         "Beginning: $(Get-Date -Format yyyy-MM-dd_HH:mm:ss)" >> $log_tempfile
     }
 
@@ -180,6 +182,8 @@ $errorcount = 0
 $instfail = 0
 $setup_file = ""
 $setup_version = ""
+$installed_version = ""
+$version_file = ""
 $setup = ""
 
 
@@ -197,7 +201,7 @@ $setup = ""
 
     $setup_fileinfo = Get-ChildItem -File $deploypath\* -Include $search_name*.exe, $search_name*.msi | Sort-Object Name | select -Last 1
     $setup_file = $setup_fileinfo.name
-    $setup = $deploypath + $setup_file
+    $setup = $deploypath + "\" + $setup_file
 
     "INFO: setup file path is $setup" >> $log_tempfile
 
@@ -213,7 +217,7 @@ $setup = ""
         # if version info is not in the setup-file: read from txt version-file
 
         "INFO: There is no version-info within the setup file. Reading from version-file..." >> $log_tempfile
-        $version_file = $deploypath + $setup_fileinfo.BaseName + ".version"
+        $version_file = $deploypath + "\" + $setup_fileinfo.BaseName + ".version"
         $setup_version = [Version](cat $version_file)
         $setup_version = New-Object System.Version($setup_version.Major, $setup_version.Minor, $setup_version.Build, 0)
 

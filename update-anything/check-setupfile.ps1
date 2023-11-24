@@ -1,10 +1,11 @@
 ﻿<#
-description: Check setup-file for Version info.
-    This script checks weather this info is available or not and
-    promts for version-info in that case
+    description: Check setup-file for Version info.
+        This script checks weather this info is available or not and
+        promts for version-info in that case
 
-author: flo.alt@fa-netz.de
-version: 0.81
+    author: flo.alt@fa-netz.de
+    https://github.com/floalt/Software-Deployment/tree/main/update-anything
+    version: 0.81
 
 #>
 

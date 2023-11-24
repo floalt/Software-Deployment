@@ -1,17 +1,33 @@
 ﻿<#
-description: Check setup-file for Nextcloud Client
-    If there is no version-info implemented in the setup-file
-    the install-nextcloud.ps1 script cannot perfon installation
+description: Check setup-file for Version info.
     This script checks weather this info is available or not and
     promts for version-info in that case
 
 author: flo.alt@fa-netz.de
-version: 0.61
+version: 0.8
 
 #>
 
-# setup here:
-$deploypath = "\\serv12-dc\deployment\nextcloud\"
+
+## getting script name & path and reading variables from config file:
+
+    $scriptpath = (Split-Path -parent $PSCommandPath)
+    $scriptname = $MyInvocation.MyCommand.Name
+    $scriptfullpath = $scriptpath + "\" + $scriptname
+
+
+
+### -------- setup --------
+
+# settings for invoke-scriptupdate
+$scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"  ### URL ist falsch!
+
+# load config file
+. $scriptpath\config.ps1
+
+
+###   -------- finish setup --------
+
 
 # look for most recent setup file:
 $setup_fileinfo = Get-ChildItem -File $deploypath\* -Include $search_name*.exe, $search_name*.msi | Sort-Object Name | select -Last 1
@@ -34,3 +50,6 @@ $man_version > $output_file
 write-host "You entered version info: $man_version"
 write-host "written to file $output_file"
 pause
+
+# update this script itself by Github source
+Invoke-WebRequest -Uri $scriptsrc -OutFile $scriptfullpath

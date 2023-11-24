@@ -5,7 +5,7 @@
 
 $mysoftware = "My Software"
 
-# check if CallAssist in installed
+# check if $mysoftware in installed
 
 $check_inst = Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | where {$_.DisplayName -like "$mysoftware*"}
 if (!$check_inst) {

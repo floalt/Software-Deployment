@@ -10,7 +10,7 @@
 
 ## settings for invoke-scriptupdate
 
-$scriptsrc = "https://raw.githubusercontent.com/floalt/Software-Deployment/main/keepass-download.ps1"
+$scriptsrc = "https://github.com/floalt/Software-Deployment/raw/main/keepass/keepass-download.ps1"
 
 
 ## activate TLS 1.1 and TLS 1.2

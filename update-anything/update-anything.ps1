@@ -9,6 +9,13 @@
 
 #>
 
+<#
+
+Merge Brach todo
+
+    - [] read file version from filename
+
+#>
 
 ## getting script name & path and reading variables from config file:
 

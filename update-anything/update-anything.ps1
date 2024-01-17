@@ -13,7 +13,10 @@
 
 Merge Brach todo
 
-    - [] read file version from filename
+    - [ ] read file version from filename
+    - [ ] self-update or not?
+    - [ ] local or central logfiles
+    - [ ] desing for: 1 script, different configs
 
 #>
 
